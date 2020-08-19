@@ -10,14 +10,14 @@ import java.sql.Blob;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
 
-    private String displayName;
+    private String velogName;
     private String shortBio;
     private Blob thumbnail;
     private Blob profileLinks;
 
     @Builder
-    public UserUpdateRequestDto(String displayName, String shortBio, Blob thumbnail, Blob profileLinks){
-        this.displayName = displayName;
+    public UserUpdateRequestDto(Blob thumbnail, String shortBio, String velogName, Blob profileLinks){
+        this.velogName = velogName;
         this.shortBio = shortBio;
         this.thumbnail = thumbnail;
         this.profileLinks = profileLinks;

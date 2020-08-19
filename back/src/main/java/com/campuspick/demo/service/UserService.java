@@ -31,8 +31,8 @@ public class UserService {
     @Transactional
     public User updateUserInfo(UUID id, UserUpdateRequestDto requestDto){
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        user.updateUserInfo(requestDto.getDisplayName(), requestDto.getShortBio(),
-                requestDto.getThumbnail(), requestDto.getProfileLinks());
+        user.updateUserInfo(requestDto.getThumbnail(), requestDto.getShortBio(),
+                requestDto.getVelogName(), requestDto.getProfileLinks());
         return user;
     }
 
