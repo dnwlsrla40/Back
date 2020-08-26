@@ -1,0 +1,267 @@
+Index: src/main/java/com/campuspick/demo/config/MongoConfig.java
+===================================================================
+--- src/main/java/com/campuspick/demo/config/MongoConfig.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/config/MongoConfig.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,23 +0,0 @@
+-package com.campuspick.demo.config;
+-
+-import com.mongodb.client.MongoClient;
+-import org.springframework.context.annotation.Bean;
+-import org.springframework.context.annotation.Configuration;
+-import org.springframework.data.mongodb.MongoDatabaseFactory;
+-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+-import org.springframework.data.mongodb.config.EnableMongoAuditing;
+-import org.springframework.data.mongodb.core.MongoTemplate;
+-import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+-
+-@Configuration
+-@EnableMongoRepositories(basePackages = "com.campuspick.demo.repository", mongoTemplateRef = "CustomMongoTemplate")
+-@EnableMongoAuditing
+-public class MongoConfig {
+-
+-    @Bean
+-    public MongoTemplate CustomMongoTemplate(MongoClient mongoClient){
+-        MongoDatabaseFactory factory = new SimpleMongoClientDatabaseFactory(mongoClient, "campuspick");
+-        return new MongoTemplate(factory);
+-    }
+-}
+Index: src/test/java/com/campuspick/demo/domain/PostsTest.java
+===================================================================
+--- src/test/java/com/campuspick/demo/domain/PostsTest.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/test/java/com/campuspick/demo/domain/PostsTest.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,48 +0,0 @@
+-package com.campuspick.demo.domain;
+-
+-import com.campuspick.demo.repository.PostsRepository;
+-import com.campuspick.demo.service.PostsService;
+-import com.jayway.jsonpath.Criteria;
+-import org.bson.types.ObjectId;
+-import org.junit.jupiter.api.Test;
+-import org.junit.jupiter.api.extension.ExtendWith;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.boot.test.context.SpringBootTest;
+-import org.springframework.data.mongodb.core.MongoTemplate;
+-import org.springframework.test.annotation.Rollback;
+-import org.springframework.test.context.junit.jupiter.SpringExtension;
+-import org.springframework.transaction.annotation.Transactional;
+-
+-import static org.assertj.core.api.Assertions.assertThat;
+-
+-import javax.management.Query;
+-import java.util.List;
+-
+-@ExtendWith(SpringExtension.class)
+-@SpringBootTest
+-public class PostsTest {
+-    @Autowired
+-    PostsService postsService;
+-
+-    @Test
+-    public void insertTest(){
+-        Posts posts = Posts.builder()
+-                .author("test Author5")
+-                .context("test Context5")
+-                .title("test Title5")
+-                .build();
+-
+-        ObjectId objectId = postsService.insertPosts(posts).getId();
+-
+-        System.out.println(objectId);
+-
+-        Posts postsList = postsService.getPosts("test Title5");
+-
+-        Posts findpost =postsList;
+-
+-        assertThat(findpost.getAuthor()).isEqualTo(posts.getAuthor());
+-        assertThat(findpost.getContext()).isEqualTo(posts.getContext());
+-        assertThat(findpost.getTitle()).isEqualTo(posts.getTitle());
+-    }
+-
+-}
+Index: src/main/java/com/campuspick/demo/config/SecurityConfig.java
+===================================================================
+--- src/main/java/com/campuspick/demo/config/SecurityConfig.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/config/SecurityConfig.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,31 +0,0 @@
+-package com.campuspick.demo.config;
+-
+-import lombok.AllArgsConstructor;
+-import org.springframework.context.annotation.Configuration;
+-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+-import org.springframework.security.config.annotation.web.builders.WebSecurity;
+-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+-
+-@Configuration
+-@EnableWebSecurity
+-@AllArgsConstructor
+-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+-    @Override
+-    public void configure(WebSecurity web) throws Exception {
+-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
+-    }
+-
+-    @Override
+-    protected void configure(HttpSecurity http) throws Exception {
+-        http.authorizeRequests()
+-                .antMatchers("/admin/**").hasRole("ADMIN")
+-                .antMatchers("/user/**").hasRole("MEMBER")
+-                .antMatchers("/**").permitAll()
+-                .and()
+-                .formLogin()
+-                .permitAll()
+-                .and()
+-                .logout();
+-    }
+-}
+Index: src/main/java/com/campuspick/demo/service/PostsService.java
+===================================================================
+--- src/main/java/com/campuspick/demo/service/PostsService.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/service/PostsService.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,26 +0,0 @@
+-package com.campuspick.demo.service;
+-
+-import com.campuspick.demo.domain.Posts;
+-import com.campuspick.demo.repository.PostsRepository;
+-import lombok.RequiredArgsConstructor;
+-import org.bson.types.ObjectId;
+-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.client.RestClientException;
+-
+-import java.util.List;
+-
+-@RequiredArgsConstructor
+-@Service
+-public class PostsService {
+-    private final PostsRepository postsRepository;
+-
+-    public Posts insertPosts(Posts post){
+-        return postsRepository.insert(post);
+-    }
+-
+-    public Posts getPosts(String title){
+-        return postsRepository.findByTitle(title);
+-    }
+-}
+Index: src/main/java/com/campuspick/demo/repository/PostsRepository.java
+===================================================================
+--- src/main/java/com/campuspick/demo/repository/PostsRepository.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/repository/PostsRepository.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,13 +0,0 @@
+-package com.campuspick.demo.repository;
+-
+-import com.campuspick.demo.domain.Posts;
+-import org.bson.types.ObjectId;
+-import org.springframework.data.mongodb.repository.MongoRepository;
+-import org.springframework.stereotype.Repository;
+-
+-import java.util.List;
+-
+-@Repository
+-public interface PostsRepository extends MongoRepository<Posts, String> {
+-    Posts findByTitle(String title);
+-}
+Index: src/main/java/com/campuspick/demo/domain/Posts.java
+===================================================================
+--- src/main/java/com/campuspick/demo/domain/Posts.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/domain/Posts.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,45 +0,0 @@
+-package com.campuspick.demo.domain;
+-
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-import org.bson.types.ObjectId;
+-import org.springframework.data.annotation.Id;
+-import org.springframework.data.mongodb.core.mapping.Document;
+-import org.springframework.format.annotation.DateTimeFormat;
+-
+-import java.text.DateFormat;
+-import java.text.SimpleDateFormat;
+-import java.util.Date;
+-
+-@Document(collection = "posts")
+-@Getter
+-@NoArgsConstructor
+-public class Posts {
+-
+-    @Id
+-    private ObjectId id;
+-
+-    private String author;
+-
+-    private String context;
+-
+-    private String title;
+-
+-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+-    private String created_at;
+-
+-    @Builder
+-    public Posts(String author, String context, String title){
+-        this.author = author;
+-        this.context = context;
+-        this.title = title;
+-        this.created_at = postDateFormat();
+-    }
+-
+-    public String postDateFormat(){
+-        Date now = new Date();
+-        SimpleDateFormat format = new SimpleDateFormat(("yyyy년 MM월 dd일 kk:mm:ss"));
+-        return format.format(now);
+-    }
+-}
+Index: src/main/java/com/campuspick/demo/controller/PostsController.java
+===================================================================
+--- src/main/java/com/campuspick/demo/controller/PostsController.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ src/main/java/com/campuspick/demo/controller/PostsController.java	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
+@@ -1,27 +0,0 @@
+-package com.campuspick.demo.controller;
+-
+-import com.campuspick.demo.domain.Posts;
+-import com.campuspick.demo.service.PostsService;
+-import lombok.RequiredArgsConstructor;
+-import org.bson.types.ObjectId;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-@RequiredArgsConstructor
+-@RestController
+-public class PostsController {
+-
+-    private final PostsService postsService;
+-
+-    @PostMapping("/write")
+-    public ObjectId save(@RequestBody Posts posts) {
+-        return postsService.insertPosts(posts).getId();
+-    }
+-
+-    @GetMapping("/@{nickname}/{title}")
+-    public ResponseEntity readPosts(@PathVariable String nickname, @PathVariable String title){
+-        Posts post = postsService.getPosts(title);
+-        return ResponseEntity.status(HttpStatus.OK).body(post);
+-    }
+-}
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"FrameworkDetectionExcludesConfiguration\">\r\n    <file type=\"web\" url=\"file://$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"JavaScriptSettings\">\r\n    <option name=\"languageLevel\" value=\"ES6\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" default=\"false\" project-jdk-name=\"13\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 6b065dbfa7369f56ef80ed315ef83bd37cff3060)
++++ .idea/misc.xml	(date 1598281641705)
+@@ -7,7 +7,7 @@
+   <component name="JavaScriptSettings">
+     <option name="languageLevel" value="ES6" />
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="13" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" project-jdk-name="13" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
