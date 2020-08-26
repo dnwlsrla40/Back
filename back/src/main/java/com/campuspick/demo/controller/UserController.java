@@ -1,7 +1,6 @@
 package com.campuspick.demo.controller;
 
 import com.campuspick.demo.domain.entity.User;
-import com.campuspick.demo.dto.UserUpdateRequestDto;
 import com.campuspick.demo.dto.UserVelogResponseDto;
 import com.campuspick.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
