@@ -1,19 +1,27 @@
 package com.campuspick.demo.controller;
 
+import com.campuspick.demo.config.jwt.JwtTokenUtil;
 import com.campuspick.demo.domain.entity.User;
 import com.campuspick.demo.dto.UserUpdateRequestDto;
 import com.campuspick.demo.dto.UserVelogResponseDto;
+import com.campuspick.demo.service.MailService;
 import com.campuspick.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
+@RequestMapping("/velog.io")
 @RestController
 public class UserController {
 
+    private final MailService mailService;
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/setting")
     public User getUserInfo(UUID id){
