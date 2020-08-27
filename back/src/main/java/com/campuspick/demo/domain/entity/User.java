@@ -15,7 +15,6 @@ import java.util.UUID;
 @Entity
 public class User {
 
-
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -28,10 +27,10 @@ public class User {
     @Column(length = 50, unique = true)
     private String email;
 
-    @Column(length = 20, name = "velog_name")
+    @Column(length = 20)
     private String velogName;
 
-    @Column(length = 100, name = "short_bio")
+    @Column(length = 100)
     private String shortBio;
 
     @Lob
@@ -39,7 +38,7 @@ public class User {
     private Blob thumbnail;
 
     @Lob
-    @Column(name = "profile_links")
+    @Column
     private Blob profileLinks;
 
     @Column(columnDefinition = "TEXT")
