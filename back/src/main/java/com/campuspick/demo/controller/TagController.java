@@ -16,12 +16,12 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @GetMapping("/tags")
+    @GetMapping("/velog.io/tags")
     public List<TagListResponseDto> listTags() {
         return tagService.getTagList();
     }
 
-    @GetMapping("/tags/{tagName}")
+    @GetMapping("/velog.io/tags/{tagName}")
     public TagDetailResponseDto getTagDetail(@PathVariable String tagName) {
         return tagService.getTagDetail(tagName);
     }

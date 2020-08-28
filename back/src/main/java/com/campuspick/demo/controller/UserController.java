@@ -15,48 +15,48 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/setting")
+    @GetMapping("/velog.io/setting")
     public User getUserSetting(String id){
         return userService.getUserInfo(UUID.fromString(id));
     }
 
-    @PutMapping("/setting/thumbnail")
+    @PutMapping("/velog.io/setting/thumbnail")
     public User updateUserThumbnail(String id, @RequestBody Blob thumbnail){
         return userService.updateUserThumbnail(UUID.fromString(id), thumbnail);
     }
 
-    @PutMapping("/setting/shortbio")
+    @PutMapping("/velog.io/setting/shortbio")
     public User updateUserShortBio(String id, @RequestBody String shortBio){
         return userService.updateUserShortBio(UUID.fromString(id), shortBio);
     }
 
-    @PutMapping("/setting/velogname")
+    @PutMapping("/velog.io/setting/velogname")
     public User updateUserVelogName(String id, @RequestBody String velogName){
         return userService.updateUserVelogName(UUID.fromString(id), velogName);
     }
 
-    @PutMapping("/setting/socialinfo")
-    public User updateUserSocialInfo(String id, @RequestBody Blob profileLinks){
-        return userService.updateUserSocialInfo(UUID.fromString(id), profileLinks);
+    @PutMapping("/velog.io/setting/profilelinks")
+    public User updateUserProfileLinks(String id, @RequestBody Blob profileLinks){
+        return userService.updateUserProfileLinks(UUID.fromString(id), profileLinks);
     }
 
-    @DeleteMapping("/setting")
+    @DeleteMapping("/velog.io/setting")
     public String deleteUser(String id){
         userService.deleteUser(UUID.fromString(id));
         return id;
     }
 
-    @GetMapping("/@{username}")
+    @GetMapping("/velog.io/@{username}")
     public UserVelogResponseDto getUserVelog(@PathVariable String username, String tagname){
         return userService.getUserVelog(username, tagname);
     }
 
-    @GetMapping("/@{username}/about")
+    @GetMapping("/velog.io/@{username}/about")
     public User getUserDetail(@PathVariable String username){
         return userService.getUserInfo(username);
     }
 
-    @PutMapping("/@{username}/about")
+    @PutMapping("/velog.io/@{username}/about")
     public User updateUserAbout(@PathVariable String username, @RequestBody String about){
         return userService.updateUserAbout(username, about);
     }
