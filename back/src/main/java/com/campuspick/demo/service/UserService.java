@@ -50,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUserProfileLinks(UUID id, Blob profileLinks){
+    public User updateUserProfileLinks(UUID id, String profileLinks){
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         user.setProfileLinks(profileLinks);
         return user;

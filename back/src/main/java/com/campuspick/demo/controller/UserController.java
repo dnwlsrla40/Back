@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/velog.io/setting/profilelinks")
-    public User updateUserProfileLinks(String id, @RequestBody Blob profileLinks){
+    public User updateUserProfileLinks(String id, @RequestBody String profileLinks){
         return userService.updateUserProfileLinks(UUID.fromString(id), profileLinks);
     }
 

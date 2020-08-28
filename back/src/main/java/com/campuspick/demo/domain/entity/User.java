@@ -39,9 +39,8 @@ public class User {
     @Column
     private Blob thumbnail;
 
-    @Lob
-    @Column
-    private Blob profileLinks;
+    @Column(columnDefinition = "JSON")
+    private String profileLinks;
 
     @Column(columnDefinition = "TEXT")
     private String about;
