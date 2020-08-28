@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -96,15 +97,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private Authentication getAuthentication(String jwtToken) {
         Map<String, Object> parseInfo = jwtTokenUtil.getUserParseInfo(jwtToken);
-        System.out.println("parseinfo: " + parseInfo);
-        List<String> rs =(List)parseInfo.get("role");
-        Collection<GrantedAuthority> tmp= new ArrayList<>();
-        for (String a: rs) {
-            tmp.add(new SimpleGrantedAuthority(a));
-        }
-        UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("username"))).authorities(tmp).build();
+//        System.out.println("parseinfo: " + parseInfo);
+//        List<String> rs =(List)parseInfo.get("role");
+//        Collection<GrantedAuthority> tmp= new ArrayList<>();
+//        for (String a: rs) {
+//            tmp.add(new SimpleGrantedAuthority(a));
+//        }
+//        UserDetails userDetails = User.builder().username(String.valueOf(parseInfo.get("username"))).authorities(tmp).build();
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
+                String.valueOf(parseInfo.get("username")), null, AuthorityUtils.createAuthorityList("ROLE_USER"));
         return usernamePasswordAuthenticationToken;
     }
 }

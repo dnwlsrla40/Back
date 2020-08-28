@@ -74,11 +74,11 @@ public class JwtTokenUtil implements Serializable {
     // JwtToken 생성
     public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> li = new ArrayList<>();
-        for (GrantedAuthority a: userDetails.getAuthorities()) {
-            li.add(a.getAuthority());
-        }
-        claims.put("role",li);
+//        List<String> li = new ArrayList<>();
+//        for (GrantedAuthority a: userDetails.getAuthorities()) {
+//            li.add(a.getAuthority());
+//        }
+//        claims.put("role",li);
         String accessToken = Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -96,9 +96,9 @@ public class JwtTokenUtil implements Serializable {
         return refreshToken;
     }
 
-    // token 유효성 검사
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
+//    // token 유효성 검사
+//    public Boolean validateToken(String token, UserDetails userDetails) {
+//        final String username = getUsernameFromToken(token);
+//        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+//    }
 }

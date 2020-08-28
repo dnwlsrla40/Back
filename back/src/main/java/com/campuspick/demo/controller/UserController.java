@@ -3,10 +3,7 @@ package com.campuspick.demo.controller;
 import com.campuspick.demo.config.jwt.JwtTokenUtil;
 import com.campuspick.demo.domain.entity.SecurityUser;
 import com.campuspick.demo.domain.entity.User;
-import com.campuspick.demo.dto.JwtResponseDto;
-import com.campuspick.demo.dto.RegisterDto;
-import com.campuspick.demo.dto.UserUpdateRequestDto;
-import com.campuspick.demo.dto.UserVelogResponseDto;
+import com.campuspick.demo.dto.*;
 import com.campuspick.demo.service.MailService;
 import com.campuspick.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +24,9 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     // 회원가입 메일 전송
-    @PostMapping("/sendRegister")
-    public void sendRegister(@RequestBody String email) throws Exception {
-        mailService.sendRegister(email);
+    @PostMapping("/register-mail")
+    public void sendRegister(@RequestBody MailDto mailDto) throws Exception {
+        mailService.sendRegister(mailDto.getEmail());
     }
 
     // 회원가입 페이지로 이동
@@ -54,9 +51,9 @@ public class UserController {
     }
 
     // 로그인 메일 전송
-    @PostMapping("/sendLogin")
-    public void sendLogin(@RequestBody String email) throws Exception {
-        mailService.sendLogin(email);
+    @PostMapping("/login-mail")
+    public void sendLogin(@RequestBody MailDto mailDto) throws Exception {
+        mailService.sendLogin(mailDto.getEmail());
     }
 
     // 로그인
