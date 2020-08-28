@@ -25,6 +25,11 @@ public class UserController {
         return userService.updateUserThumbnail(UUID.fromString(id), thumbnail);
     }
 
+    @DeleteMapping("/velog.io/setting/thumbnail")
+    public User deleteUserThumbnail(String id){
+        return userService.deleteUserThumbnail(UUID.fromString(id));
+    }
+
     @PutMapping("/velog.io/setting/shortbio")
     public User updateUserShortBio(String id, @RequestBody String shortBio){
         return userService.updateUserShortBio(UUID.fromString(id), shortBio);

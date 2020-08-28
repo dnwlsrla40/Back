@@ -36,6 +36,13 @@ public class UserService {
     }
 
     @Transactional
+    public User deleteUserThumbnail(UUID id){
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        user.setThumbnail(null);
+        return user;
+    }
+
+    @Transactional
     public User updateUserShortBio(UUID id, String shortBio){
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         user.setShortBio(shortBio);
