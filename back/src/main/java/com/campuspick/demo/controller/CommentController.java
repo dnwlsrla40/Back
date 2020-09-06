@@ -26,4 +26,9 @@ public class CommentController {
         return commentService.saveComment(requestDto);
     }
 
+    @PutMapping("/comment")
+    public Comment updateComment(String commentId, @RequestBody String text){
+        return commentService.updateComment(UUID.fromString(commentId), text);
+    }
+
 }

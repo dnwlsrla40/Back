@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Comment {
@@ -63,6 +62,10 @@ public class Comment {
 //        this.replyTo = replyTo;
 //        this.level = level;
 
+    }
+
+    public void update(String text){
+        this.text = text;
     }
 
 }

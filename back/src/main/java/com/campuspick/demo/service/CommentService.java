@@ -43,4 +43,13 @@ public class CommentService {
 
         return comment;
     }
+
+    @Transactional
+    public Comment updateComment(UUID commentId, String text){
+        Comment target = commentRepository.findById(commentId).orElseThrow(IllegalArgumentException::new);
+        target.update(text);
+
+        return target;
+    }
+
 }
