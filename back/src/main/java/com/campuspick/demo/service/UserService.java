@@ -7,7 +7,6 @@ import com.campuspick.demo.domain.repository.PostRepository;
 import com.campuspick.demo.domain.repository.PostTagRepository;
 import com.campuspick.demo.domain.repository.UserRepository;
 import com.campuspick.demo.dto.RegisterDto;
-import com.campuspick.demo.dto.UserUpdateRequestDto;
 import com.campuspick.demo.dto.UserVelogResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

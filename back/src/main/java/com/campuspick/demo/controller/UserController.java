@@ -25,9 +25,6 @@ public class UserController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserService userService;
-
     // 회원가입 메일 전송
     @PostMapping("/register-mail")
     public void sendRegister(@RequestBody MailDto mailDto) throws Exception {
