@@ -30,19 +30,9 @@ public class Comment {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String text;
 
-//    @ManyToOne
-//    @JoinColumn(name = "reply_to")
-//    private Comment replyTo;
-
     @OneToMany
     @JoinColumn
     private List<Comment> reComment;
-
-//    @Column
-//    private int level;
-
-//    @Column(columnDefinition = "TINYINT")
-//    private boolean hasReplies = false;
 
     @Column(columnDefinition = "TINYINT")
     private boolean isRoot;
@@ -59,8 +49,6 @@ public class Comment {
         this.user = user;
         this.text = text;
         this.isRoot = isRoot;
-//        this.replyTo = replyTo;
-//        this.level = level;
 
     }
 
