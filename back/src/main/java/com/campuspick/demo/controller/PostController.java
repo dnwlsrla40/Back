@@ -1,5 +1,9 @@
 package com.campuspick.demo.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RequiredArgsConstructor
 import com.campuspick.demo.dto.PostResponseDto;
 import com.campuspick.demo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +24,8 @@ public class PostController {
         return postService.getPost(username, postUrl);
     }
 
+    @GetMapping("/write")
+    public String write() throws Exception {
+        return "write";
+    }
 }
