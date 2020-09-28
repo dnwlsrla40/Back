@@ -25,9 +25,11 @@ public interface PostTagRepository extends JpaRepository<PostTag, UUID> {
 
     // 이 태그를 가진 모든 포스트
     List<PostTag> findAllByTagName(String tagName);
+    List<PostTag> findAllByPostId(UUID pid);
 
     List<PostTag> findByPostIdIn(List<UUID> postIds);
-
     List<PostTag> findByTagNameAndPostIdIn(String tagname, List<UUID> postIds);
+
+
 
 }
