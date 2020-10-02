@@ -7,13 +7,13 @@ import com.campuspick.demo.domain.repository.PostRepository;
 import com.campuspick.demo.domain.repository.PostTagRepository;
 import com.campuspick.demo.domain.repository.UserRepository;
 import com.campuspick.demo.dto.RegisterDto;
-import com.campuspick.demo.dto.UserUpdateRequestDto;
 import com.campuspick.demo.dto.UserVelogResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
+import java.sql.Blob;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -46,10 +46,37 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUserInfo(UUID id, UserUpdateRequestDto requestDto){
+    public User updateUserThumbnail(UUID id, Blob thumbnail){
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        user.updateUserInfo(requestDto.getThumbnail(), requestDto.getShortBio(),
-                requestDto.getVelogName(), requestDto.getProfileLinks());
+        user.setThumbnail(thumbnail);
+        return user;
+    }
+
+    @Transactional
+    public User deleteUserThumbnail(UUID id){
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        user.setThumbnail(null);
+        return user;
+    }
+
+    @Transactional
+    public User updateUserShortBio(UUID id, String shortBio){
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        user.setShortBio(shortBio);
+        return user;
+    }
+
+    @Transactional
+    public User updateUserVelogName(UUID id, String velogName){
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        user.setVelogName(velogName);
+        return user;
+    }
+
+    @Transactional
+    public User updateUserProfileLinks(UUID id, String profileLinks){
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        user.setProfileLinks(profileLinks);
         return user;
     }
 
@@ -84,7 +111,7 @@ public class UserService {
     @Transactional
     public User updateUserAbout(String username, String about){
         User user = userRepository.findByUsername(username);
-        user.updateUserAbout(about);
+        user.setAbout(about);
         return user;
     }
 

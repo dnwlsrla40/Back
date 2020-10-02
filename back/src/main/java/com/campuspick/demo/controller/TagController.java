@@ -4,12 +4,11 @@ import com.campuspick.demo.dto.TagDetailResponseDto;
 import com.campuspick.demo.dto.TagListResponseDto;
 import com.campuspick.demo.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/velog.io")
 @RestController
 public class TagController {
 
@@ -17,8 +16,8 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping("/tags")
-    public List<TagListResponseDto> listTags() {
-        return tagService.getTagList();
+    public List<TagListResponseDto> listTags(@RequestParam(defaultValue = "trending") String sort, int page) {
+        return tagService.getTagList(sort, page);
     }
 
     @GetMapping("/tags/{tagName}")

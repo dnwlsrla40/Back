@@ -1,12 +1,8 @@
 package com.campuspick.demo.domain.repository;
 
-import com.campuspick.demo.domain.entity.Post;
 import com.campuspick.demo.domain.entity.PostTag;
-import com.campuspick.demo.domain.entity.Tag;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,9 +25,11 @@ public interface PostTagRepository extends JpaRepository<PostTag, UUID> {
 
     // 이 태그를 가진 모든 포스트
     List<PostTag> findAllByTagName(String tagName);
+    List<PostTag> findAllByPostId(UUID pid);
 
     List<PostTag> findByPostIdIn(List<UUID> postIds);
-
     List<PostTag> findByTagNameAndPostIdIn(String tagname, List<UUID> postIds);
+
+
 
 }

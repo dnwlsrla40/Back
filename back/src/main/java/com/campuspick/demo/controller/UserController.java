@@ -5,11 +5,13 @@ import com.campuspick.demo.domain.entity.SecurityUser;
 import com.campuspick.demo.domain.entity.User;
 import com.campuspick.demo.dto.*;
 import com.campuspick.demo.service.MailService;
+import com.campuspick.demo.dto.UserVelogResponseDto;
 import com.campuspick.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Blob;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -83,18 +85,38 @@ public class UserController {
     }
 
     @GetMapping("/setting")
-    public User getUserInfo(UUID id){
-        return userService.getUserInfo(id);
+    public User getUserSetting(String id){
+        return userService.getUserInfo(UUID.fromString(id));
     }
 
-    @PutMapping("/setting")
-    public User updateUserInfo(UUID id, @RequestBody UserUpdateRequestDto requestDto){
-        return userService.updateUserInfo(id, requestDto);
+    @PutMapping("/setting/thumbnail")
+    public User updateUserThumbnail(String id, @RequestBody Blob thumbnail){
+        return userService.updateUserThumbnail(UUID.fromString(id), thumbnail);
+    }
+
+    @DeleteMapping("/setting/thumbnail")
+    public User deleteUserThumbnail(String id){
+        return userService.deleteUserThumbnail(UUID.fromString(id));
+    }
+
+    @PutMapping("/setting/shortbio")
+    public User updateUserShortBio(String id, @RequestBody String shortBio){
+        return userService.updateUserShortBio(UUID.fromString(id), shortBio);
+    }
+
+    @PutMapping("/setting/velogname")
+    public User updateUserVelogName(String id, @RequestBody String velogName){
+        return userService.updateUserVelogName(UUID.fromString(id), velogName);
+    }
+
+    @PutMapping("/setting/profilelinks")
+    public User updateUserProfileLinks(String id, @RequestBody String profileLinks){
+        return userService.updateUserProfileLinks(UUID.fromString(id), profileLinks);
     }
 
     @DeleteMapping("/setting")
-    public UUID deleteUser(UUID id){
-        userService.deleteUser(id);
+    public String deleteUser(String id){
+        userService.deleteUser(UUID.fromString(id));
         return id;
     }
 
@@ -104,7 +126,7 @@ public class UserController {
     }
 
     @GetMapping("/@{username}/about")
-    public User getUserInfo(@PathVariable String username){
+    public User getUserDetail(@PathVariable String username){
         return userService.getUserInfo(username);
     }
 
