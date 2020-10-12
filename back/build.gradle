@@ -19,21 +19,30 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    compile 'redis.clients:jedis'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-data-redis')
+    // mapstruct 관련
+    implementation('org.mapstruct:mapstruct:1.3.1.Final')
+//    annotationProcessor('org.mapstruct:mapstruct-processor:1.3.1Final')
+    // mail service 관련
+    implementation('org.springframework.boot:spring-boot-starter-mail')
+    // jwt 관련
+    implementation('io.jsonwebtoken:jjwt:0.9.1')
+    // redis 관련
+    compile('redis.clients:jedis')
+    compile 'org.projectlombok:lombok'
+    compile('mysql:mysql-connector-java')
+    compile('org.apache.commons:commons-lang3:3.4')
+    // thumbnail 관련
+    compile('org.imgscalr:imgscalr-lib:4.2')
+    // file upload 관련
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {

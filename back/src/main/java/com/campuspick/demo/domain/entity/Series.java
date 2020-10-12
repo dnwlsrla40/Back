@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -20,26 +21,36 @@ public class Series {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(length = 50, nullable = false)
     private String name;
 
     @Lob
-    @Column
-    private Blob thumbnail;
+    @Column(columnDefinition = "BLOB")
+    private String thumbnail;
 
-    @Column(length = 100, nullable = false)
-    private String seriesUrl;
+    // series url 중복 방지(url Slug 포함되야함)
+    @Column(length = 100, name="url", nullable = false)
+    private String url;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
-    public Series(User user, String name, Blob thumbnail, String url){
-        this.user = user;
+    public Series(User user, String name, String thumbnail, String url){
+        Assert.notNull(name, "name must be not null");
+        Assert.notNull(user, "user must be not null");
+
         this.name = name;
         this.thumbnail = thumbnail;
-        this.seriesUrl = url;
+        this.url = url;
+        this.user = user;
+    }
+
+    // null 값이 들어올 경우 초기화
+    @PrePersist
+    public void prePersist(){
+        this.url = this.url == null ? "/@"+this.user.getUsername()+"/series/"+this.name : this.url;
     }
 
 }

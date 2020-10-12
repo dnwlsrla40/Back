@@ -1,6 +1,6 @@
 package com.campuspick.demo.controller;
 
-import com.campuspick.demo.config.jwt.JwtTokenUtil;
+import com.campuspick.demo.util.JwtTokenUtil;
 import com.campuspick.demo.domain.entity.SecurityUser;
 import com.campuspick.demo.domain.entity.User;
 import com.campuspick.demo.dto.*;
