@@ -32,12 +32,14 @@ public class SeriesDto {
     }
 
 
-    @Getter
+    @Data
     public static class PostCreateSeriesDto {
         private String name;
 
         public PostCreateSeriesDto(String name){
             this.name = name;
         }
+
+        public PostCreateSeriesDto(){};
     }
 }

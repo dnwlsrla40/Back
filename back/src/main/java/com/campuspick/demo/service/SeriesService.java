@@ -38,19 +38,9 @@ public class SeriesService {
         return responseDto;
     }
 
-    // 유저 전체 Series 가져오기
-    @javax.transaction.Transactional
-    public List<Series> getSeriesList(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        return seriesRepository.findAllByEmail(email);
-    }
-
     // 유저 Series 추가
-    @javax.transaction.Transactional
+    @Transactional
     public Series addSeries(SeriesDto.SeriesCreateRequestDto requestDto){
-
-        System.out.println(requestDto.getName());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();

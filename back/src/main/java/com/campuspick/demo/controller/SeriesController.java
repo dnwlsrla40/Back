@@ -25,12 +25,6 @@ public class SeriesController {
         return seriesService.getSeriesPosts(username, seriesUrl);
     }
 
-    // series 리스트 보여주기(시리즈에 추가하기 버튼 눌렀을 시)
-    @GetMapping("/series")
-    public List<Series> getSeries(){
-        return seriesService.getSeriesList();
-    }
-
     // series 추가
     @PostMapping("/series")
     public Series addSeries(@RequestBody SeriesDto.SeriesCreateRequestDto seriesCreateRequestDto){

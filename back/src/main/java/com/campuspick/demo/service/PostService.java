@@ -41,7 +41,7 @@ public class PostService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityExistsException());
 
         // post create 시 등록된 series
-        SeriesDto.PostCreateSeriesDto postCreateSeriesDto = new SeriesDto.PostCreateSeriesDto(requestDto.getSeries().getClass().getName());
+        SeriesDto.PostCreateSeriesDto postCreateSeriesDto = new SeriesDto.PostCreateSeriesDto(requestDto.getSeries().getName());
 
         // post create 시 등록된 TagList
         List<TagDto> postCreateTagListDto = requestDto.getTagList();
@@ -59,7 +59,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(requestDto.getTitle())
                 .body(requestDto.getBody())
-                .isPrivate(true)
+                .isPrivate(requestDto.getIsPrivate())
                 .url(newUrl)
                 .shortDescription(requestDto.getShortDescription())
                 .user(user)
@@ -87,6 +87,9 @@ public class PostService {
             post.setSeries(seriesRepository.findByName(postCreateSeriesDto.getName()));
             // post의 seriesIndex 등록
             post.setSeriesIndex(postRepository.getMaxSeriesIndex(postCreateSeriesDto.getName())+1);
+            if(post.getSeriesIndex() == 1){
+                seriesRepository.findByName(postCreateSeriesDto.getName()).setThumbnail(post.getThumbnail());
+            }
         }
     }
 

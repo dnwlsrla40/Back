@@ -48,6 +48,7 @@ public class Post {
     private Integer views = 0;
 
     @Column(name = "is_private", columnDefinition = "TINYINT")
+    @ColumnDefault("0")
     private Boolean isPrivate;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -80,7 +81,7 @@ public class Post {
     public void prePersist(){
         this.likes = this.likes == null ? 0 : this.likes;
         this.views = this.views == null ? 0 : this.views;
-//        this.isPrivate = this.isPrivate == null ? false : this.isPrivate;
+        this.isPrivate = this.isPrivate == null ? false : this.isPrivate;
         this.url = this.url == null ? "/@"+this.user.getUsername()+"/"+this.title : this.url;
         this.shortDescription = this.shortDescription == null ? (this.body.length() > 150 ? this.body.substring(0,150) : this.body) : this.shortDescription;
         this.seriesIndex = this.seriesIndex == null ? 0 : this.seriesIndex;

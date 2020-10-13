@@ -19,10 +19,10 @@ public class PostDto {
         private String thumbnail;
         private Boolean isPrivate;
 
-        private SeriesDto series;
+        private SeriesDto.PostCreateSeriesDto series;
         private List<TagDto> tagList;
 
-        public PostCreateRequestDto(String title, String body, String url, String shortDescription, String thumbnail, boolean isPrivate, SeriesDto series, List<TagDto> tagList){
+        public PostCreateRequestDto(String title, String body, String url, String shortDescription, String thumbnail, Boolean isPrivate, SeriesDto.PostCreateSeriesDto series, List<TagDto> tagList){
 
             Assert.notNull(title, "title must not be null");
             Assert.notNull(body, "body must not be null");
