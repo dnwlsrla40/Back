@@ -42,8 +42,8 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/register")
-    public JwtResponseDto register(@RequestBody RegisterDto registerDto) {
-        SecurityUser user = new SecurityUser(userService.save(registerDto));
+    public JwtResponseDto register(@RequestBody UserDto.UserCreateRequestDto requestDto) {
+        SecurityUser user = new SecurityUser(userService.save(requestDto));
         String accessToken = jwtTokenUtil.generateAccessToken(user);
         String refreshToken = jwtTokenUtil.generateRefreshToken(user.getUsername());
 

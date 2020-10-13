@@ -1,11 +1,9 @@
 package com.campuspick.demo.controller;
 
 import com.campuspick.demo.domain.entity.Series;
-import com.campuspick.demo.dto.SeriesCreateRequestDto;
-import com.campuspick.demo.dto.SeriesResponseDto;
+import com.campuspick.demo.dto.SeriesDto;
 import com.campuspick.demo.service.SeriesService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class SeriesController {
     }
 
     @GetMapping("/@{username}/series/{seriesUrl}")
-    public SeriesResponseDto getSeriesPosts(@PathVariable String username, @PathVariable String seriesUrl){
+    public SeriesDto.SeriesResponseDto getSeriesPosts(@PathVariable String username, @PathVariable String seriesUrl){
         return seriesService.getSeriesPosts(username, seriesUrl);
     }
 
@@ -35,7 +33,7 @@ public class SeriesController {
 
     // series 추가
     @PostMapping("/series")
-    public Series addSeries(@RequestBody SeriesCreateRequestDto seriesCreateRequestDto){
+    public Series addSeries(@RequestBody SeriesDto.SeriesCreateRequestDto seriesCreateRequestDto){
         return seriesService.addSeries(seriesCreateRequestDto);
     }
 

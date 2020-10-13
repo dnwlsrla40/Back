@@ -2,8 +2,7 @@ package com.campuspick.demo.service;
 
 import com.campuspick.demo.domain.entity.*;
 import com.campuspick.demo.domain.repository.*;
-import com.campuspick.demo.dto.PostCreateRequestDto;
-import com.campuspick.demo.dto.PostResponseDto;
+import com.campuspick.demo.dto.PostDto;
 import com.campuspick.demo.dto.SeriesDto;
 import com.campuspick.demo.dto.TagDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,30 +33,35 @@ public class PostService {
     private String thumbnailPath;
 
     @Transactional
-    public Post write(PostCreateRequestDto postCreateRequestDto) {
+    public Post write(PostDto.PostCreateRequestDto requestDto) {
 
         // 로그인 한 User 정보 가져오기
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityExistsException());
 
-        SeriesDto postCreateSeriesDto = postCreateRequestDto.getSeries();
-        List<TagDto> postCreateTagListDto = postCreateRequestDto.getTagList();
-        String thumbnail = postCreateRequestDto.getThumbnail();
+        // post create 시 등록된 series
+        SeriesDto.PostCreateSeriesDto postCreateSeriesDto = new SeriesDto.PostCreateSeriesDto(requestDto.getSeries().getClass().getName());
+
+        // post create 시 등록된 TagList
+        List<TagDto> postCreateTagListDto = requestDto.getTagList();
+
+        // post create 시 등록된 thumbnail 경로
+        String thumbnail = requestDto.getThumbnail();
 
         // post의 url 중복 검사
-        String newUrl = postCreateRequestDto.getUrl();
+        String newUrl = requestDto.getUrl();
         if(checkUrlOverlap(newUrl)){
             newUrl = createUrlSlug(newUrl);
         }
 
         // 생성할 post 작성
         Post post = Post.builder()
-                .title(postCreateRequestDto.getTitle())
-                .body(postCreateRequestDto.getBody())
+                .title(requestDto.getTitle())
+                .body(requestDto.getBody())
                 .isPrivate(true)
                 .url(newUrl)
-                .shortDescription(postCreateRequestDto.getShortDescription())
+                .shortDescription(requestDto.getShortDescription())
                 .user(user)
                 .build();
 
@@ -77,7 +80,7 @@ public class PostService {
     }
 
     // 시리즈를 등록했는 지 확인
-    public void seriesExistCheck(SeriesDto postCreateSeriesDto, Post post){
+    public void seriesExistCheck(SeriesDto.PostCreateSeriesDto postCreateSeriesDto, Post post){
         // series가 있다면 post에 series 등록
         if (postCreateSeriesDto != null && seriesRepository.existsByName(postCreateSeriesDto.getName())) {
             // post의 series 등록

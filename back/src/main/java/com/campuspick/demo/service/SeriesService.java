@@ -6,8 +6,7 @@ import com.campuspick.demo.domain.entity.User;
 import com.campuspick.demo.domain.repository.PostRepository;
 import com.campuspick.demo.domain.repository.SeriesRepository;
 import com.campuspick.demo.domain.repository.UserRepository;
-import com.campuspick.demo.dto.SeriesCreateRequestDto;
-import com.campuspick.demo.dto.SeriesResponseDto;
+import com.campuspick.demo.dto.SeriesDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
@@ -32,10 +31,11 @@ public class SeriesService {
     }
 
     @Transactional(readOnly = true)
-    public SeriesResponseDto getSeriesPosts(String username, String seriesUrl){
+    public SeriesDto.SeriesResponseDto getSeriesPosts(String username, String seriesUrl){
         Series series = seriesRepository.findByUserUsernameAndUrl(username, seriesUrl);
         List<Post> posts = postRepository.findAllByUserUsernameAndSeriesUrlOrderBySeriesIndex(username, seriesUrl);
-        return new SeriesResponseDto(series, posts);
+        SeriesDto.SeriesResponseDto responseDto = new SeriesDto.SeriesResponseDto(series, posts);
+        return responseDto;
     }
 
     // 유저 전체 Series 가져오기
@@ -48,22 +48,22 @@ public class SeriesService {
 
     // 유저 Series 추가
     @javax.transaction.Transactional
-    public Series addSeries(SeriesCreateRequestDto seriesCreateRequestDto){
+    public Series addSeries(SeriesDto.SeriesCreateRequestDto requestDto){
 
-        System.out.println(seriesCreateRequestDto.getName());
+        System.out.println(requestDto.getName());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityExistsException());
 
         // url 중복 검사
-        String newUrl = seriesCreateRequestDto.getUrl();
+        String newUrl = requestDto.getUrl();
         if(checkUrlOverlap(newUrl)){
             newUrl = createUrlSlug(newUrl);
         }
 
         Series series = Series.builder()
-                .name(seriesCreateRequestDto.getName())
+                .name(requestDto.getName())
                 .url(newUrl)
                 .user(user)
                 .build();

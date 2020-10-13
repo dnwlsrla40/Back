@@ -6,7 +6,7 @@ import com.campuspick.demo.domain.entity.User;
 import com.campuspick.demo.domain.repository.PostRepository;
 import com.campuspick.demo.domain.repository.PostTagRepository;
 import com.campuspick.demo.domain.repository.UserRepository;
-import com.campuspick.demo.dto.RegisterDto;
+import com.campuspick.demo.dto.UserDto;
 import com.campuspick.demo.dto.UserVelogResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class UserService {
     private final PostTagRepository postTagRepository;
 
     @Transactional
-    public User save(RegisterDto registerDto){
+    public User save(UserDto.UserCreateRequestDto requestDto){
         User user = User.builder()
-                .email(registerDto.getEmail())
-                .username(registerDto.getUsername())
-                .shortBio(registerDto.getShortBio())
+                .email(requestDto.getEmail())
+                .username(requestDto.getUsername())
+                .shortBio(requestDto.getShortBio())
                 .build();
         return userRepository.save(user);
     }
